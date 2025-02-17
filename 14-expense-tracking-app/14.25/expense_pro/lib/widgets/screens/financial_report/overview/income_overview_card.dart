@@ -1,0 +1,60 @@
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import '/data/models/transaction_model.dart';
+
+import '/utils/functions/format_double_string.dart';
+import '/utils/contants/transaction_categories.dart';
+
+import '/widgets/screens/financial_report/overview/this_month_text.dart';
+import '/widgets/screens/financial_report/overview/biggest_transaction_info_card.dart';
+
+class IncomeOverviewCard extends StatelessWidget {
+  const IncomeOverviewCard({
+    super.key,
+    required this.totalIncomeAmount,
+    required this.biggestIncome,
+  });
+
+  final double totalIncomeAmount;
+  final TransactionModel? biggestIncome;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        const ThisMonthText(),
+        Column(
+          children: [
+            Text(
+              'You Earned 💰',
+              style: GoogleFonts.inter(
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 24),
+            Text(
+              "\$${formatDoubleString(totalIncomeAmount)}",
+              style: GoogleFonts.inter(
+                fontSize: 64,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+        biggestIncome != null
+            ? BiggestTransactionInfoCard(
+                transactionText: 'Income',
+                category:
+                    biggestIncome!.category ?? TransactionCategories.salary,
+                amount: formatDoubleString(biggestIncome!.amount ?? 0),
+              )
+            : const SizedBox(),
+      ],
+    );
+  }
+}
